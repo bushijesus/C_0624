@@ -1,0 +1,279 @@
+//
+// Created by Administrator on 2023/6/15.
+//
+
+// 模拟实现strlen()
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+//计数器方法
+size_t my_strlen1(const char * ch)
+{
+    assert(ch);
+    size_t cnt = 0;
+    while (*ch != '\0')
+    {
+        cnt++;
+        ch++;
+    }
+    return cnt;
+}
+
+//递归方法(不创建临时变量存储器)
+size_t my_strlen2(const char * ch)
+{
+    if(*ch == '\0')
+        return 0;
+    else
+        return 1 + my_strlen2(ch+1);
+}
+
+//指针-指针方法
+size_t my_strlen3(const char * ch)
+{
+    char * p = ch;
+    while (*p != '\0')
+        p++;
+    return p - ch;
+}
+
+char * my_strcpy(char * dest, const char * src)
+{
+    assert(dest && src);
+    char *  ret = dest;
+    while (*src != '\0')
+    {
+        *dest++ = *src++;
+    }
+    *dest = *src; // 复制'\0'
+    return ret;
+}
+
+char * my_strcat(char * dest, const char * src)
+{
+    assert(dest && src);
+    char * ret = dest;
+    while (*dest != '\0')
+    {
+        dest++;
+    }
+    while (*dest++ = *src++)
+    {
+        ;
+    }
+    return ret;
+}
+
+int my_strcmp(const char *str1, const char *str2)
+{
+    assert(str1 && str2);
+    while (*str1 == *str2)
+    {
+        if(*str1 == '\0')
+            return 0;
+        str1++;
+        str2++;
+    }
+    // return (*str1 - *str2);
+    if(*str1 > *str2)
+        return 1;
+    else
+        return -1;
+}
+
+char * my_strstr(const char * str1, const char * str2)
+{
+    assert(str1 && str2);
+    const char * s1 = str1;
+    const char * s2 = str2;
+    const char * p = str1;
+    while (*p)
+    {
+        s1 = p;
+        s2 = str2;
+        while (*s1!='\0' && *s2!='\0' && *s1 == *s2)
+        {
+            s1++;
+            s2++;
+        }
+        if(*s2 == '\0')
+        {
+            return (char*)p;
+        }
+        p++;
+    }
+    return NULL;
+}
+
+void * my_memcpy(void * dest, void * src, size_t num)
+{
+    assert(dest && src);
+    void * ret = dest;
+    while (num--)
+    {
+        *(char*)dest = *(char*)src;
+        dest = (char *)dest + 1;
+        src = (char *)src + 1;
+    }
+    return ret;
+}
+
+void * my_memmove(void * dest, const void * src, size_t size)
+{
+    void * ret = dest;
+    if(dest <= src || (char*)dest >= ((char *)src) + size)
+    {
+        //从前往后
+        while (size--)
+        {
+            *(char*)dest = *(char*)src;
+            dest = (char *)dest + 1;
+            src = (char *)src + 1;
+        }
+    }
+    else
+    {
+        //从后往前
+        dest = (char *) dest + size - 1;
+        src = (char *)src + size - 1;
+        while (size--)
+        {
+            *((char*)dest + size) = *((char*)src + size);
+            dest = (char *)dest - 1;
+            src = (char *)src - 1;
+        }
+    }
+    return ret;
+}
+struct Test
+{
+    int Num;
+    char *pcName;
+    short sDate;
+    char cha[2];
+    short sBa[4];
+}*p;
+int main()
+{
+//    //一维数组
+//    int a[] = {1,2,3,4};
+//    printf("%d\n",sizeof(a));       // 4 * 4 = 16
+//    printf("%d\n",sizeof(a+0));     // 4 or 8
+//    printf("%d\n",sizeof(*a));      //sizeof(1)  -->  4
+//    printf("%d\n",sizeof(a+1));     // 4 or 8
+//    printf("%d\n",sizeof(a[1]));    // 4
+//    printf("%d\n",sizeof(&a));      // 4 or 8   数组的地址也是个地址
+//    printf("%d\n",sizeof(*&a));     // 4 * 4 = 16
+//    printf("%d\n",sizeof(&a+1));    // 4 or 8   跳过了一整个数组
+//    printf("%d\n",sizeof(&a[0]));   // 4 or 8
+//    printf("%d\n",sizeof(&a[0]+1)); // 4 or 8
+
+//    //字符数组
+//    char arr[] = {'a','b','c','d','e','f'};
+//    printf("%d\n", sizeof(arr));            // 6 * 1 = 6
+//    printf("%d\n", sizeof(arr+0));          // 4 or 8
+//    printf("%d\n", sizeof(*arr));           // 1         sizeof(arr[0])
+//    printf("%d\n", sizeof(arr[1]));         // 1
+//    printf("%d\n", sizeof(&arr));           // 4 or 8
+//    printf("%d\n", sizeof(&arr+1));         // 4 or 8
+//    printf("%d\n", sizeof(&arr[0]+1));      // 4 or 8    第二个元素的地址
+//
+//    printf("%d\n", strlen(arr));        // 随机值
+//    printf("%d\n", strlen(arr+0));      // 随机值
+//
+//    printf("%d\n", strlen(*arr));       // 报错      strlen(97) but strlen(const char *)
+//    printf("%d\n", strlen(arr[1]));     // 报错      strlen(98) but strlen(const char *)
+//
+//    printf("%d\n", strlen(&arr));       // 随机值
+//    printf("%d\n", strlen(&arr+1));     // 随机值-6
+//    printf("%d\n", strlen(&arr[0]+1));  // 随机值-1
+
+//    char arr[] = "abcdef";
+//    printf("%d\n", sizeof(arr));             // 1 * 7 = 7
+//    printf("%d\n", sizeof(arr+0));           // 4 or 8
+//    printf("%d\n", sizeof(*arr));            // 1
+//    printf("%d\n", sizeof(arr[1]));          // 1
+//    printf("%d\n", sizeof(&arr));            // 4 or 8
+//    printf("%d\n", sizeof(&arr+1));          // 4 or 8
+//    printf("%d\n", sizeof(&arr[0]+1));       // 4 or 8
+//
+//    printf("%d\n", strlen(arr));         // 6
+//    printf("%d\n", strlen(arr+0));       // 6
+//    printf("%d\n", strlen(*arr));        // 报错      strlen(97) but strlen(const char *)
+//    printf("%d\n", strlen(arr[1]));      // 报错      strlen(98) but strlen(const char *)
+//    printf("%d\n", strlen(&arr));        // 6
+//    printf("%d\n", strlen(&arr+1));      // 随机值
+//    printf("%d\n", strlen(&arr[0]+1));   // 5
+
+//    char *p = "abcdef";
+//    printf("%d\n", sizeof(p));               // 4 or 8
+//    printf("%d\n", sizeof(p+1));             // 4 or 8
+//    printf("%d\n", sizeof(*p));              // 1
+//    printf("%d\n", sizeof(p[0]));            // 1
+//    printf("%d\n", sizeof(&p));              // 4 or 8
+//    printf("%d\n", sizeof(&p+1));            // 4 or 8
+//    printf("%d\n", sizeof(&p[0]+1));         // 4 or 8
+//
+//    printf("%d\n", strlen(p));           // 6
+//    printf("%d\n", strlen(p+1));         // 5
+//    printf("%d\n", strlen(*p));          // 报错      strlen(97) but strlen(const char *)
+//    printf("%d\n", strlen(p[0]));        // 报错      strlen(97) but strlen(const char *)
+//    printf("%d\n", strlen(&p));          // 随机值    二级指针
+//    printf("%d\n", strlen(&p+1));        // 随机值    二级指针
+//    printf("%d\n", strlen(&p[0]+1));     // 5
+
+//    //二维数组
+//    int a[3][4] = {0};
+//    printf("%d\n",sizeof(a));                // 4 * 12 = 48
+//    printf("%d\n",sizeof(a[0][0]));          // 4              sizeof(int)
+//    printf("%d\n",sizeof(a[0]));             // 4 * 4 = 16     第一行
+//    printf("%d\n",sizeof(a[0]+1));           // 4 or 8         第一行第二个元素的地址
+//    printf("%d\n",sizeof(*(a[0]+1)));        // 4              sizeof(int)
+//    printf("%d\n",sizeof(a+1));              // 4 or 8         第二行的地址
+//    printf("%d\n",sizeof(*(a+1)));           // 4 * 4 = 16     第二行
+//    printf("%d\n",sizeof(&a[0]+1));          // 4 or 8         第二行的地址
+//    printf("%d\n",sizeof(*(&a[0]+1)));       // 4 * 4 = 16     第二行
+//    printf("%d\n",sizeof(*a));               // 4 * 4 = 16     第一行
+//    printf("%d\n",sizeof(a[3]));             // 16             sizeof只须知道类型即可计算，不访问
+
+//    int a[5] = { 1, 2, 3, 4, 5 };
+//    int *ptr = (int *)(&a + 1);       // 跳过整个数组
+//    printf( "%d,%d", *(a + 1), *(ptr - 1));      // 2 5
+
+//    printf("%p\n", p + 0x1);
+//    printf("%p\n", (unsigned long)p + 0x1);
+//    printf("%p\n", (unsigned int*)p + 0x1);
+
+//    int a[4] = { 1, 2, 3, 4 };
+//    int *ptr1 = (int *)(&a + 1);               // 跳过整个数组
+//    int *ptr2 = (int *)((int)a + 1);           // 整数加一，向前走了1/4个int，小端存储
+//    printf( "%x,%x", ptr1[-1], *ptr2);  // 4 (00000004)   2000000 (02000000)
+
+//    int a[3][2] = { (0, 1), (2, 3), (4, 5) }; // ()不是{}，元素为逗号表达式，数组元素为1 3 5 0 0 0
+//    int *p;
+//    p = a[0];
+//    printf( "%d", p[0]);   // 1
+
+//    int a[5][5];
+//    int(*p)[4];
+//    p = a;
+//    printf( "%p,%d\n", &p[4][2] - &a[4][2], &p[4][2] - &a[4][2]);   // ff ff ff fc    -4
+
+//    int aa[2][5] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+//    int *ptr1 = (int *)(&aa + 1);
+//    int *ptr2 = (int *)(*(aa + 1));   // 即为 *(aa[1])，对第二行地址解引用，拿到第二行，相当于第二行的数组名
+//    printf( "%d,%d", *(ptr1 - 1), *(ptr2 - 1));   // 10   5
+
+//    char *a[] = {"work","at","alibaba"};
+//    char**pa = a;
+//    pa++;
+//    printf("%s\n", *pa);    // at
+
+//    char *c[] = {"ENTER","NEW","POINT","FIRST"};
+//    char**cp[] = {c+3,c+2,c+1,c};
+//    char***cpp = cp;
+//    printf("%s\n", **++cpp);         // POINT
+//    printf("%s\n", *--*++cpp+3);     // ER
+//    printf("%s\n", *cpp[-2]+3);      // ST
+//    printf("%s\n", cpp[-1][-1]+1);   // EW
+}
